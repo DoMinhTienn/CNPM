@@ -94,7 +94,7 @@ class MedicalExaminationListView(AuthenticatedModelView):
 class StatsView(BaseView):
     @expose('/')
     def index(self):
-        return self.render('admin/stats.html')
+        return self.render('admin/stats.html', stats=utils.drugfrequency_stats())
 
     def is_accessible(self):
         return current_user.is_authenticated and current_user.user_role == UserRole.ADMIN
@@ -136,4 +136,5 @@ admin.add_view(UserView(User, db.session, name='User'))
 admin.add_view(MesicalRView(MedicalRegister, db.session, name='DS đăng ký khám'))
 admin.add_view(MedicalExaminationPatientView(MedicalExaminationPatient, db.session, name ='BN Kham Benh'))
 admin.add_view(MedicalExaminationListView(MedicalExaminationList, db.session, name='DanhSKham'))
+admin.add_view(StatsView(name='Stats'))
 admin.add_view(LogoutView(name='Logout'))
