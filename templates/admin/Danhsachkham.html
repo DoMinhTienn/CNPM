@@ -1,0 +1,100 @@
+{% extends 'admin/base.html' %}
+
+{% block body %}
+<br>
+<h1 class="text-info text-center">Y tá Lập danh sách khám</h1>
+<br>
+<nav class="navbar navbar-expand-md bg-light navbar-light">
+    <!-- Navbar links -->
+  <div class="collapse navbar-collapse" id="collapsibleNavbar">
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <a class="nav-link" href="#">Danh sách khám</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">Danh sách bệnh nhân</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">Danh sách đăng ký</a>
+      </li>
+    </ul>
+  </div>
+</nav>
+<br>
+<div>
+<!--    <div>-->
+<!--        <form>-->
+<!--            <div class="form-group text-danger">-->
+<!--                Tìm kiếm theo mã danh sách-->
+<!--                <input type="number" class="form-control" name="kwds" placeholder="Nhap ma danh sach..." />-->
+<!--            </div>-->
+<!--            <div class="form-group text-danger">-->
+<!--                Tìm kiếm theo mã y tá-->
+<!--                <input type="number" class="form-control" name="kwyt" placeholder="Nhập mã y ta...." />-->
+<!--            </div>-->
+<!--            <div class="form-group text-danger">-->
+<!--                Tìm kiếm theo mã bệnh nhân-->
+<!--                <input type="text" class="form-control" name="kwbn" placeholder="Nhập mã bệnh nhân...." />-->
+<!--            </div>-->
+<!--            <div class="form-group">-->
+<!--                <p class="text-danger">Tìm theo ngày</p>-->
+<!--                Ngày bắt đầu-->
+<!--                <input type="date" class="form-control" name="from_date" placeholder="Chọn ngày bắt đầu"/>-->
+<!--                <br>-->
+<!--                Ngày kết thúc-->
+<!--                <input type="date" class="form-control" name="to_date" />-->
+<!--            </div>-->
+<!--            <input type="submit" value="Tìm kiếm" class="btn btn-success" />-->
+<!--        </form>-->
+<!--    </div>-->
+<!--    <br>-->
+    <div class="row">
+        <div class="col-md-8 col-xs-12">
+            <table class="table" border="1" width="100%">
+                <tr>
+                    <th>Mã DS</th>
+                    <th>Mã y tá </th>
+                    <th>Mã BN </th>
+                    <th>Tên bệnh nhân</th>
+                    <th>Ngay kham</th>
+                </tr>
+                {% for p in pv %}
+                <tr>
+                    <td>{{ p[0] }}</td>
+                    <td>{{ p[1] }}</td>
+                    <td>{{ p[3] }}</td>
+                    <td>{{ p[4] }}</td>
+                    <td>{{ p[2] }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+        <div style="width:30%; margin-left: 30px;">
+            <form >
+                <div class="form-group text-danger">
+                    Tìm kiếm theo mã danh sách
+                    <input type="number" class="form-control" name="kwds" placeholder="Nhap ma danh sach..." />
+                </div>
+                <div class="form-group text-danger">
+                    Tìm kiếm theo mã y tá
+                    <input type="number" class="form-control" name="kwyt" placeholder="Nhập mã y ta...." />
+                </div>
+                <div class="form-group text-danger">
+                    Tìm kiếm theo mã bệnh nhân
+                    <input type="text" class="form-control" name="kwbn" placeholder="Nhập mã bệnh nhân...." />
+                </div>
+                <div class="form-group">
+                    <p class="text-danger">Tìm theo ngày</p>
+                    Ngày bắt đầu
+                    <input type="date" class="form-control" name="from_date" placeholder="Chọn ngày bắt đầu"/>
+                    Ngày kết thúc
+                    <input type="date" class="form-control" name="to_date" />
+                </div>
+                <input type="submit" value="Tìm kiếm" class="btn btn-success" />
+            </form>
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,64 @@
+{% extends 'admin/base.html' %}
+
+{% block body %}
+<br>
+<h1 class="text-info text-center">Danh sách bệnh nhân</h1>
+<br>
+<nav class="navbar navbar-expand-md bg-light navbar-light">
+    <!-- Navbar links -->
+  <div class="collapse navbar-collapse" id="collapsibleNavbar">
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <a class="nav-link" href="#">Danh sách khám</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">Danh sách bệnh nhân</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">Danh sách đăng ký</a>
+      </li>
+    </ul>
+  </div>
+</nav>
+<br>
+<div>
+  <div style="width: 70%;">
+        <form>
+            <div class="form-group text-danger">
+                Tìm theo tên
+                <input type="text" class="form-control" name="kwname" placeholder="Nhập tên bệnh nhân..." />
+            </div>
+            <div class="form-group text-danger">
+                Tìm theo năm sinh
+                <input type="number" class="form-control" name="kwy" placeholder="Nhập năm sinh...." />
+            </div>
+            <div class="form-group text-danger">
+                Tìm theo số lần khám
+                <input type="number" class="form-control" name="kwslk" placeholder="Nhập số lần khám...." />
+            </div>
+            <input type="submit" value="Tìm kiếm" class="btn btn-success" />
+        </form>
+  </div>
+  <br>
+  <div class="row">
+        <div class="col-md-8 col-xs-12">
+            <table class="table" border="1" width="100%">
+                <tr>
+                    <th>Mã bệnh nhân</th>
+                    <th>Tên bệnh nhân </th>
+                    <th>Ngày sinh</th>
+                    <th>Số lần khám</th>
+                </tr>
+                {% for p in bn %}
+                <tr>
+                    <td>{{ p[0] }}</td>
+                    <td>{{ p[1] }}</td>
+                    <td>{{ p[2] }}</td>
+                    <td>{{ p[3] }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+  </div>
+</div>
+{% endblock %}
