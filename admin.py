@@ -1,13 +1,18 @@
-from PhongKhamTu import db, app,  utils
+from PhongKhamTu import db, app
+from PhongKhamTu.models import *
 from flask_admin.contrib.sqla import ModelView
-from PhongKhamTu.model import User, UserRole, PATIENT, MedicalExaminationPatient, MedicalExaminationList, MedicalRegister, MedicalCertificate\
-    , Medicine, MedicalCertificateDetail, Unit, Bill
-from  flask_admin import BaseView, expose, Admin, AdminIndexView
-from  flask import redirect, request
+from flask_admin import BaseView, expose, Admin
+from flask_login import current_user, logout_user
+from flask import redirect, request
+from flask_admin import AdminIndexView
+from datetime import datetime
+import utils
 
+class AuthenticatedModelView(ModelView):
+    def is_accessible(self):
+        return current_user.is_authenticated and current_user.user_role == UserRole.ADMIN
 
-
-class MedicineView(ModelView):
+class MedicineView(AuthenticatedModelView):
     column_display_pk = True
     can_view_details = True
     can_export = True
@@ -16,7 +21,7 @@ class MedicineView(ModelView):
     column_searchable_list = ['name']
     column_exclude_list = ['id']
 
-class MedicalCertificateView(ModelView):
+class MedicalCertificateView(AuthenticatedModelView):
     column_display_pk = True
     can_view_details = True
     can_export = True
@@ -25,7 +30,7 @@ class MedicalCertificateView(ModelView):
     column_searchable_list = ['id']
     column_exclude_list = ['id', 'details', 'bills']
 
-class PATIENTView(ModelView):
+class PATIENTView(AuthenticatedModelView):
     column_display_pk = True
     can_view_details = True
     can_export = True
@@ -36,19 +41,30 @@ class PATIENTView(ModelView):
     details_modal = True
     create_modal = True
 
-class MedicalCertificateDetailView(ModelView):
+class PATIENTView(AuthenticatedModelView):
+    column_display_pk = True
+    can_view_details = True
+    can_export = True
+    column_labels = {'id': 'ma BN','name': 'Tên Bệnh Nhân', 'yearofbirth': 'Năm sinh', 'address': 'Địa chỉ'}
+    column_searchable_list = ['yearofbirth', 'address']
+    column_exclude_list = ['id']
+    edit_modal = True
+    details_modal = True
+    create_modal = True
+
+class MedicalCertificateDetailView(AuthenticatedModelView):
     column_display_pk = True
     can_view_details = True
     can_export = True
     column_labels = {'quantily': 'Số Lượng', 'medicine': 'Tên Thuốc', 'medicalcertificate': 'Mã Phiếu Khám'}
 
-class UnitView(ModelView):
+class UnitView(AuthenticatedModelView):
     column_display_pk = True
     can_view_details = True
     can_export = True
     column_labels = {'name': 'Loại THuốc', 'id': 'Mã Loại Thuốc'}
 
-class MesicalRView(ModelView):
+class MesicalRView(AuthenticatedModelView):
     column_filters = ["name", "yearofbirth", "register_date"]
     column_searchable_list = ["name"]
     can_view_details = True
@@ -56,46 +72,64 @@ class MesicalRView(ModelView):
     details_modal = True
     create_modal = True
 
-class UserView(ModelView):
+class UserView(AuthenticatedModelView):
     can_view_details = True
     edit_modal = True
     details_modal = True
     create_modal = True
 
-class MedicalExaminationPatientView(ModelView):
+class MedicalExaminationPatientView(AuthenticatedModelView):
     can_view_details = True
     edit_modal = True
     details_modal = True
     create_modal = True
     column_searchable_list = ['mc_id']
 
-class MedicalExaminationListView(ModelView):
+class MedicalExaminationListView(AuthenticatedModelView):
     edit_modal = True
     details_modal = True
     create_modal = True
     column_filters = ['nurse_id', 'mc_date']
 
-class DanhsachView(BaseView):
+class StatsView(BaseView):
     @expose('/')
     def index(self):
+        return self.render('admin/stats.html', stats=utils.drugfrequency_stats())
+
+    def is_accessible(self):
+        return current_user.is_authenticated and current_user.user_role == UserRole.ADMIN
+96
+
+class LogoutView(BaseView):
+    @expose('/')
+    def index(self):
+        logout_user()
+        return redirect('/admin')
+
+    def is_accessible(self):
+        return current_user.is_authenticated
+
+
+class MyAdminIndexView(AdminIndexView):
+    @expose('/')
+    def index(self):
+        kwtt = request.args.get('kwtt')
+        kwdv = request.args.get('kwdv')
+        kwsld = request.args.get('sl')
+        kwname = request.args.get('kwname')
+        kwy = request.args.get('kwy')
+        kwslk = request.args.get('kwslk')
         kwds = request.args.get('kwds')
         kwyt = request.args.get('kwyt')
         kwbn = request.args.get('kwbn')
         from_date = request.args.get('from_date')
         to_date = request.args.get('to_date')
-
-        return self.render('admin/Danhsachkham.html', pv = utils.DanhsachView(kwds=kwds, kwyt=kwyt,kwbn=kwbn, from_date=from_date, to_date=to_date))
-
-class BenhnhanView(BaseView):
-    @expose('/')
-    def index(self):
-        kwname = request.args.get('kwname')
-        kwy = request.args.get('kwy')
-        kwslk = request.args.get('kwslk')
-        return self.render('admin/Danhsachbenhnhan.html', bn = utils.BenhnhanView(kwname=kwname, kwy=kwy, kwslk=kwslk))
+        return self.render('admin/index.html', stats=utils.drugfrequency_stats(kwtt=kwtt, kwdv=kwdv, kwsld=kwsld),patient = utils.patient_view(kwname=kwname, kwy=kwy, kwslk=kwslk), mclist = utils.mclist_view(kwds=kwds, kwyt=kwyt,kwbn=kwbn, from_date=from_date, to_date=to_date))
 
 
-admin = Admin(app=app, name="My web", template_mode="bootstrap4")
+
+admin = Admin(app=app, name='Phong Kham Tu', template_mode='bootstrap4', index_view=MyAdminIndexView())
+
 admin.add_view(MedicalCertificateView(MedicalCertificate, db.session, name='Phiếu Khám'))
 admin.add_view(MedicineView(Medicine, db.session, name='Danh Sách Thuốc'))
 admin.add_view(PATIENTView(PATIENT, db.session, name='Bệnh Nhân'))
@@ -105,5 +139,5 @@ admin.add_view(UserView(User, db.session, name='User'))
 admin.add_view(MesicalRView(MedicalRegister, db.session, name='DS đăng ký khám'))
 admin.add_view(MedicalExaminationPatientView(MedicalExaminationPatient, db.session, name ='BN Kham Benh'))
 admin.add_view(MedicalExaminationListView(MedicalExaminationList, db.session, name='DanhSKham'))
-admin.add_view(DanhsachView(name="Danh sách khám"))
-admin.add_view(BenhnhanView(name="Danh sách bệnh nhân"))
+admin.add_view(StatsView(name='Stats'))
+admin.add_view(LogoutView(name='Logout'))
