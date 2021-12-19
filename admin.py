@@ -16,41 +16,35 @@ class MedicineView(AuthenticatedModelView):
     column_display_pk = True
     can_view_details = True
     can_export = True
-    column_labels = {'name': 'Tên thuốc', 'price': 'Gía tiền', 'unit_id': 'Đơn vị'}
+    column_labels = {'id': 'Mã Thuốc', 'name': 'Tên thuốc', 'price': 'Gía tiền', 'unit': 'Đơn vị'}
     column_filters = ['name', 'price']
     column_searchable_list = ['name']
-    column_exclude_list = ['id']
 
 class MedicalCertificateView(AuthenticatedModelView):
     column_display_pk = True
     can_view_details = True
     can_export = True
-    column_labels = {'doctor_id': 'Mã bác sĩ', 'healthcheck_date': 'Ngày khám', 'symptom': 'Triệu chứng', 'guess': 'Dự đoán bệnh', 'patient_id': 'Bệnh nhân'}
+    column_labels = {"id": 'Mã Phiếu Khám','doctor_id': 'Mã bác sĩ', 'healthcheck_date': 'Ngày khám', 'symptom': 'Triệu chứng', 'guess': 'Dự đoán bệnh', 'patient_id': 'Bệnh nhân'}
     column_filters = ['doctor_id', 'healthcheck_date', 'patient_id']
-    column_searchable_list = ['id']
-    column_exclude_list = ['id', 'details', 'bills']
+    column_searchable_list = ['doctor_id']
+    column_exclude_list = ['patient']
 
 class PATIENTView(AuthenticatedModelView):
     column_display_pk = True
     can_view_details = True
     can_export = True
-    column_labels = {'id': 'ma BN','name': 'Tên Bệnh Nhân', 'yearofbirth': 'Năm sinh', 'address': 'Địa chỉ'}
-    column_searchable_list = ['yearofbirth', 'address']
-    column_exclude_list = ['id']
+    column_labels = {"id": 'Mã Bệnh Nhân','name': 'Tên Bệnh Nhân', 'yearofbirth': 'Năm sinh', 'address': 'Địa chỉ'}
+    column_searchable_list = ['name','yearofbirth', 'address']
     edit_modal = True
     details_modal = True
     create_modal = True
 
-class PATIENTView(AuthenticatedModelView):
+class BillView(AuthenticatedModelView):
     column_display_pk = True
     can_view_details = True
     can_export = True
-    column_labels = {'id': 'ma BN','name': 'Tên Bệnh Nhân', 'yearofbirth': 'Năm sinh', 'address': 'Địa chỉ'}
-    column_searchable_list = ['yearofbirth', 'address']
-    column_exclude_list = ['id']
-    edit_modal = True
-    details_modal = True
-    create_modal = True
+    column_labels = ({"id": 'Mã Hóa Đơn', 'nurse_id': "Mã Y Tá", 'healthCheck_price': 'Tiền Khám'})
+    column_exclude_list = ['medicalcertificate']
 
 class MedicalCertificateDetailView(AuthenticatedModelView):
     column_display_pk = True
@@ -62,15 +56,14 @@ class UnitView(AuthenticatedModelView):
     column_display_pk = True
     can_view_details = True
     can_export = True
-    column_labels = {'name': 'Loại THuốc', 'id': 'Mã Loại Thuốc'}
+    column_labels = {'name': 'Đơn Vị', 'id': 'Mã Đơn Vị'}
 
 class MesicalRView(AuthenticatedModelView):
-    column_filters = ["name", "yearofbirth", "register_date"]
-    column_searchable_list = ["name"]
+    column_labels = {'id': 'STT', 'name': 'Tên', 'yearofbirth': 'Năm Sinh', 'address': 'Địa chỉ', 'register_date': 'Ngày Đăng Ký'}
+    column_searchable_list = ["name", 'register_date']
+    column_display_pk = True
     can_view_details = True
-    edit_modal = True
-    details_modal = True
-    create_modal = True
+    can_export = True
 
 class UserView(AuthenticatedModelView):
     can_view_details = True
@@ -83,13 +76,17 @@ class MedicalExaminationPatientView(AuthenticatedModelView):
     edit_modal = True
     details_modal = True
     create_modal = True
+    column_labels = {'patient': 'Tên Bệnh Nhân', 'medicalexaminationlist':'Danh Sách Khám Bệnh'}
     column_searchable_list = ['mc_id']
 
 class MedicalExaminationListView(AuthenticatedModelView):
     edit_modal = True
     details_modal = True
     create_modal = True
-    column_filters = ['nurse_id', 'mc_date']
+    column_labels = {"id": 'Mã Phiếu Khám','nurse_id': "Mã Y Tá" , 'mc_date': 'Ngày Khám Bệnh'}
+    column_display_pk = True
+    can_view_details = True
+    can_export = True
 
 class StatsView(BaseView):
     @expose('/')
@@ -132,12 +129,13 @@ admin = Admin(app=app, name='Phong Kham Tu', template_mode='bootstrap4', index_v
 
 admin.add_view(MedicalCertificateView(MedicalCertificate, db.session, name='Phiếu Khám'))
 admin.add_view(MedicineView(Medicine, db.session, name='Danh Sách Thuốc'))
+admin.add_view(BillView(Bill, db.session, name='Hóa Đơn'))
 admin.add_view(PATIENTView(PATIENT, db.session, name='Bệnh Nhân'))
 admin.add_view(MedicalCertificateDetailView(MedicalCertificateDetail, db.session, name='Thêm Thuốc Vào Phiếu khám'))
 admin.add_view(UnitView(Unit, db.session, name='Đơn Vị'))
 admin.add_view(UserView(User, db.session, name='User'))
-admin.add_view(MesicalRView(MedicalRegister, db.session, name='DS đăng ký khám'))
-admin.add_view(MedicalExaminationPatientView(MedicalExaminationPatient, db.session, name ='BN Kham Benh'))
-admin.add_view(MedicalExaminationListView(MedicalExaminationList, db.session, name='DanhSKham'))
-admin.add_view(StatsView(name='Stats'))
-admin.add_view(LogoutView(name='Logout'))
+admin.add_view(MesicalRView(MedicalRegister, db.session, name='Danh Sách Đăng Ký Khám'))
+admin.add_view(MedicalExaminationPatientView(MedicalExaminationPatient, db.session, name ='Bệnh Nhân Khám Bệnh'))
+admin.add_view(MedicalExaminationListView(MedicalExaminationList, db.session, name='Danh Sách Khám Bệnh'))
+admin.add_view(StatsView(name='Thống Kê'))
+admin.add_view(LogoutView(name='Đăng Xuất'))

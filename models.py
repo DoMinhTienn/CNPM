@@ -22,7 +22,7 @@ class UserRole(UserEnum):
 class User(BaseModel, UserMixin):
     __tablename__ = 'user'
     name = Column(String(50), nullable=False)
-    yearofbirth = Column(DateTime, nullable=False)
+    yearofbirth = Column(DateTime)
     address = Column(String(100))
     phone = Column(Integer)
     username = Column(String(50), nullable=False, unique=True)
@@ -129,4 +129,19 @@ class MedicalExaminationPatient(db.Model):
 if __name__ == '__main__':
     db.create_all()
 
-
+    # a = [
+    #         {
+    #             "name": "Nguyễn Văn Trường",
+    #             "yearofbirth": "2000-01-05 05:20:00",
+    #             "address": "TP Ho Chi Minh",
+    #             "phone": 666888,
+    #             "username": "admin",
+    #             "password":"0CC175B9C0F1B6A831C399E269772661",
+    #             "user_role": "ADMIN"
+    #
+    #         }]
+    # for u in a:
+    #     Us = User(name=u["name"], yearofbirth=u["yearofbirth"], address=u["address"], username=u['username'], password=u['password'], user_role=u['user_role'])
+    #     db.session.add(Us)
+    #
+    #     db.session.commit()
