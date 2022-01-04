@@ -1,0 +1,84 @@
+{% extends 'layout/base.html' %}
+
+{% block title %}Đăng Nhap{% endblock %}
+
+{% block css %}
+	<link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,900&display=swap" rel="stylesheet">
+
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="{{ url_for('static', filename='account/css/style.css') }}">
+{% endblock %}
+
+{% block js %}
+  <script src="{{ url_for('static', filename='account/js/jquery.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='account/js/popper.js') }}"></script>
+  <script src="{{ url_for('static', filename='account/js/bootstrap.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='account/js/main.js') }}"></script>
+{% endblock %}
+
+{% block content %}
+<section>
+	<div class="row justify-content-center">
+		<div class="col-md-12 col-lg-10">
+			<div class="wrap d-md-flex">
+				<div class="login-wrap p-4 p-lg-5 col-md-12">
+			      	<div class="d-flex">
+			      		<div class="w-100">
+			      			<h3 class="mb-4">Sign In</h3>
+			      		</div>
+							<div class="w-100">
+								<p class="social-media d-flex justify-content-end">
+									<a href="#" class="social-icon d-flex align-items-center justify-content-center"><span class="fa fa-facebook"></span></a>
+									<a href="#" class="social-icon d-flex align-items-center justify-content-center"><span class="fa fa-google"></span></a>
+								</p>
+							</div>
+			      	</div>
+					<form method="post" action="{{ url_for('register') }}" enctype="multipart/form-data">
+			      		<div class="form-group mb-3">
+			      			<label class="label" for="name">HỌ TÊN</label>
+       						<input type="text" name="name" class="form-control" id="name" placeholder="Nhập họ tên..." required />
+			      		</div>
+						<div class="form-group mb-3">
+			      			<label class="label" for="name">NĂM SINH</label>
+       						<input type="date" name="name" class="form-control" id="yearofbirth" required />
+			      		</div>
+						<div class="form-group mb-3">
+			      			<label class="label" for="name">ĐỊA CHỈ</label>
+       						<input type="text" name="name" class="form-control" id="address" placeholder="Nhập địa chỉ..." required />
+			      		</div>
+						<div class="form-group mb-3">
+			      			<label class="label" for="name">SỐ ĐIỆN THOẠI</label>
+       						<input type="text" name="name" class="form-control" id="phone" placeholder="Nhập số điện thoại..." required />
+			      		</div>
+		            	<div class="form-group mb-3">
+							<label class="label" for="email">EMAIL</label>
+							<input type="email" name="email" class="form-control" id="email" placeholder="Nhap email..." />
+						</div>
+						<div class="form-group">
+						   <label class="label" for="username">USERNAME</label>
+						   <input type="text" name="username" class="form-control" id="username" placeholder="Nhap username..." required />
+					    </div>
+						<div class="form-group">
+						   <label class="label" for="password">MẬT KHẨU</label>
+						   <input type="password" name="password" class="form-control" id="password" placeholder="Nhap mat khau..." required />
+					    </div>
+						<div class="form-group">
+						   <label class="label" for="confirm">XÁC NHẬN LẠI MẬT KHẨU</label>
+						   <input type="password" name="confirm" class="form-control" id="confirm" placeholder="Nhap xac nhan mat khau..." required />
+					   </div>
+						<div class="form-group">
+						   <label class="label" for="avatar">ẢNH ĐẠI DIỆN</label>
+						   <input type="file" name="avatar" class="form-control" id="avatar" />
+					   </div>
+						<div class="form-group">
+		            		<input type="submit" value="Dang ky" class="btn btn-danger" />
+		            	</div>
+		            </form>
+
+					<h6>Bạn đã có tài khoản? <a href="{{ url_for('user_signin') }}">đăng nhập tại đây</a></h6>
+		        </div>
+		      </div>
+		</div>
+	</div>
+</section>
+{% endblock %}

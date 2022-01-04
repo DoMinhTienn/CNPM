@@ -27,7 +27,7 @@ class User(BaseModel, UserMixin):
     phone = Column(Integer)
     username = Column(String(50), nullable=False, unique=True)
     password = Column(String(50), nullable=False)
-    avatar = Column(String(100))
+    avatar = Column(String(200))
     email = Column(String(50))
     joined_date = Column(DateTime, default=datetime.now())
     user_role = Column(Enum(UserRole), default=UserRole.PATIENT)
@@ -145,3 +145,5 @@ if __name__ == '__main__':
     #     db.session.add(Us)
     #
     #     db.session.commit()
+
+# username: admin password: a

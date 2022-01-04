@@ -6,16 +6,41 @@ from sqlalchemy import func
 from sqlalchemy.sql import extract
 import hashlib
 
-def check_user(username, password, role=UserRole.PATIENT):
+def create_user(name, username, password, yearofbith, phone, address=None, email=None, avatar=None):
     password = str(hashlib.md5(password.strip().encode('utf-8')).hexdigest())
+    user = User(name=name.strip(),
+                yearofbith=yearofbith.strip(),
+                address=address,
+                phone=phone,
+                username=username.strip(),
+                password=password,
+                email=email.strip() if email else email,
+                avatar=avatar)
+    db.session.add(user)
 
-    return User.query.filter(User.username.__eq__(username.strip()),
-                             User.password.__eq__(password),
-                             User.user_role.__eq__(role)).first()
+    try:
+        db.session.commit()
+    except:
+        return False
+    else:
+        return True
 
 def get_user_by_id(user_id):
     return User.query.get(user_id)
 
+def check_login(username, password):
+    if username and password:
+        password = str(hashlib.md5(password.strip().encode('utf-8')).hexdigest())
+
+        return User.query.filter(User.username.__eq__(username.strip()),
+                                 User.password.__eq__(password)).first()
+
+def check_admin(username, password, role):
+    if username and password:
+        password = str(hashlib.md5(password.strip().encode('utf-8')).hexdigest())
+
+        return User.query.filter(User.username.__eq__(username.strip()),
+                                 User.password.__eq__(password)).first()
 
 def drugfrequency_stats(kwtt=None, kwdv=None, kwsld=None):
     p = db.session.query(Medicine.name, Unit.name, func.sum(MedicalCertificateDetail.quantily), func.count(MedicalCertificateDetail.medicine_id))\

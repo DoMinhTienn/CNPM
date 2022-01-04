@@ -1,93 +1,62 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>HI</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+{% extends 'layout/base.html' %}
 
-    <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet" />
-    <script src="{{ url_for('static', filename='js/cart.js') }}"></script>
-</head>
-<body>
-<header>
-    <nav class="navbar navbar-expand-md bg-dark navbar-dark">
-  <!-- Brand -->
-  <a class="navbar-brand" href="#">
-    <img src="{{ url_for('static', filename='images/default.png') }}" alt="Logo" style="width:40px;">
-  </a>
+{% block title %}Đăng Nhap{% endblock %}
 
-  <!-- Toggler/collapsibe Button -->
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
-    <span class="navbar-toggler-icon"></span>
-  </button>
+{% block css %}
+	<link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,900&display=swap" rel="stylesheet">
 
-  <!-- Navbar links -->
-  <div class="collapse navbar-collapse" id="collapsibleNavbar">
-    <ul class="navbar-nav">
-      <li class="nav-item {% if 'category_id' not in request.args %}active{% endif %}">
-        <a class="nav-link" href="/">Trang chu</a>
-      </li>
-      {% for c in categories %}
-      <li class="nav-item {% if 'category_id' in request.args and request.args.category_id|int==c.id %}active{% endif %}">
-        <a class="nav-link" href="{{ url_for('home', category_id=c.id) }}">{{ c.name }}</a>
-      </li>
-      {% endfor %}
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="{{ url_for('static', filename='account/css/style.css') }}">
+{% endblock %}
 
-      {% if current_user.is_authenticated %}
-      <li class="nav-item">
-        <a class="nav-link text-danger" href="{{ url_for('home') }}">
-          {% if current_user.avatar %}
-          <img src="{{ current_user.avatar }}" class="rounded-circle" width="30" alt="{{ current_user.username }}" />
-          {% else %}
-          <img src="{{ url_for('static', filename='images/default.png') }}" class="rounded-circle" width="30" alt="{{ current_user.username }}" />
-          {% endif %}
+{% block js %}
+  <script src="{{ url_for('static', filename='account/js/jquery.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='account/js/popper.js') }}"></script>
+  <script src="{{ url_for('static', filename='account/js/bootstrap.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='account/js/main.js') }}"></script>
+{% endblock %}
 
-          {{ current_user.username }}
-        </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link text-success" href="{{ url_for('signout') }}">Dang xuat</a>
-      </li>
-      {% else %}
-      <li class="nav-item">
-        <a class="nav-link text-success" href="{{ url_for('signin') }}">Dang nhap</a>
-      </li>
-      {% endif %}
-    </ul>
-  </div>
-  <form class="form-inline">
-    <input class="form-control mr-sm-2" type="text" name="keyword" placeholder="Nhap tu khoa...">
-    <button class="btn btn-success"   type="submit">Tim kiem</button>
-  </form>
-</nav>
-</header>
-<h1 class="text-center text-info">DANG NHAP NGUOI DUNG</h1>
+{% block content %}
 
-{% if error_msg %}
-<div class="alert alert-danger">
-    {{ error_msg }}
-</div>
-{% endif %}
-
-
-<form method="post">
-    <div class="form-group">
-       <label for="username">Username</label>
-       <input type="text" name="username" class="form-control"
-              id="username" placeholder="Nhap username..." required />
-   </div>
-    <div class="form-group">
-       <label for="password">Mat khau</label>
-       <input type="password"
-              name="password"
-              class="form-control"
-              id="password"
-              placeholder="Nhap mat khau..." required />
-   </div>
-    <input type="submit" value="Dang nhap" class="btn btn-danger" />
-</form>
-</body>
-</html>
+<section>
+	<div class="row justify-content-center">
+		<div class="col-md-12 col-lg-10">
+			<div class="wrap d-md-flex">
+				<div class="text-wrap p-4 p-lg-5 text-center d-flex align-items-center order-md-last">
+					<div class="text w-100">
+						<h2>Welcome to login</h2>
+						<p>Don't have an account?</p>
+						<a href="{{ url_for('register') }}" class="btn btn-white btn-outline-white">Sign Up</a>
+					</div>
+				</div>
+				<div class="login-wrap p-4 p-lg-5">
+			      	<div class="d-flex">
+			      		<div class="w-100">
+			      			<h3 class="mb-4">Sign In</h3>
+			      		</div>
+							<div class="w-100">
+								<p class="social-media d-flex justify-content-end">
+									<a href="#" class="social-icon d-flex align-items-center justify-content-center"><span class="fa fa-facebook"></span></a>
+									<a href="#" class="social-icon d-flex align-items-center justify-content-center"><span class="fa fa-google"></span></a>
+								</p>
+							</div>
+			      	</div>
+					<form method="post" class="signin-form">
+			      		<div class="form-group mb-3">
+			      			<label class="label" for="username">Username</label>
+			      			<input id="username" name="username" type="text" class="form-control" placeholder="username" required>
+			      		</div>
+		            	<div class="form-group mb-3">
+		            	<label class="label"  for="password">Password</label>
+		              <input id="password" name="password" type="password" class="form-control" placeholder="password" required>
+		            </div>
+		            	<div class="form-group">
+		            	<button type="submit" class="form-control btn btn-primary submit px-3">Sign In</button>
+		            </div>
+		           </form>
+		        </div>
+		      </div>
+		</div>
+	</div>
+</section>
+{% endblock %}
