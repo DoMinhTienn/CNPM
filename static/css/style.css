@@ -338,8 +338,13 @@ a:focus {
   }
 }
 
+.mc{
+    padding: 0
+}
+
 .title-color {
   color: #223a66;
+  text-align:center;
 }
 
 .secondary-bg {
@@ -491,13 +496,13 @@ a:focus {
 }
 
 .text-color-2 {
-  color: #e12454;
+  color: #223a66;
 }
 
 .divider {
   width: 40px;
   height: 5px;
-  background: #e12454;
+  background: #223a66;
 }
 
 @media (max-width: 480px) {
@@ -679,7 +684,7 @@ a:focus {
 }
 
 .service i {
-  color: #e12454;
+  color: #223a66;
 }
 
 .service h4 {
@@ -712,66 +717,11 @@ a:focus {
 }
 
 .department-service li i {
-  color: #e12454;
+  color: #223a66;
 }
 
-.doctors .btn-group .btn {
-  border-radius: 0px;
-  margin: 0px 2px;
-  text-transform: capitalize;
-  font-size: 16px;
-  padding: .6rem 1.5rem;
-  cursor: pointer;
 }
 
-.doctors .btn-group .btn.active {
-  box-shadow: none !important;
-  border-color: transparent;
-  background: #e12454;
-  color: #fff;
-}
-
-.doctors .btn-group .btn.focus {
-  box-shadow: none !important;
-  border-color: transparent;
-}
-
-.doctors .btn-group .btn:focus {
-  box-shadow: none !important;
-  border-color: transparent;
-  background: #e12454;
-  color: #fff;
-}
-
-.doctors .btn-group .btn:hover {
-  box-shadow: none !important;
-  border-color: transparent;
-  background: #e12454;
-  color: #fff;
-}
-
-.doctors .btn-group > .btn-group:not(:last-child) > .btn, .doctors .btn-group > .btn:not(:last-child):not(.dropdown-toggle), .doctors .btn-group > .btn:not(:first-child) {
-  border-radius: 3px;
-}
-
-.doctor-inner-box {
-  overflow: hidden;
-}
-
-.doctor-inner-box .doctor-profile {
-  overflow: hidden;
-  position: relative;
-  box-shadow: 0px 8px 16px 0px rgba(200, 183, 255, 0.2);
-}
-
-.doctor-inner-box .doctor-profile .doctor-img {
-  transition: all .35s ease;
-}
-
-.doctor-inner-box .doctor-profile .doctor-img:hover {
-  -webkit-transform: scale(1.1);
-  transform: scale(1.1);
-}
 
 .lh-35 {
   line-height: 35px;
@@ -784,7 +734,7 @@ a:focus {
 
 .doctor-info li i {
   margin-right: 20px;
-  color: #e12454;
+  color: #223a66;
 }
 
 .read-more {
@@ -937,7 +887,7 @@ a:focus {
 
 .testimonial-block.style-2 i {
   bottom: -20px;
-  color: #e12454;
+  color: #223a66;
   opacity: .3;
 }
 
@@ -1033,7 +983,7 @@ a:focus {
   font-size: 50px;
   margin-bottom: 15px;
   display: inline-block;
-  color: #e12454;
+  color: #223a66;
 }
 
 .blog-item-content h2 {
@@ -1089,7 +1039,7 @@ a:focus {
   color: #223a66;
   padding: 40px;
   font-style: italic;
-  border-left: 5px solid #e12454;
+  border-left: 5px solid #223a66;
   margin: 25px 0px;
 }
 
@@ -1296,11 +1246,15 @@ a:focus {
   bottom: 0px;
   width: 35px;
   height: 3px;
-  background: #e12454;
+  background: #223a66;
 }
 
 .sidebar-widget.latest-post .media img {
   border-radius: 7px;
+}
+
+.sign{
+    margin: 30px
 }
 
 .sidebar-widget.latest-post .media h6 {
@@ -1464,7 +1418,7 @@ a:focus {
 
 .backtop {
   position: fixed;
-  background: #e12454;
+  background: #223a66;
   z-index: 9999;
   display: inline-block;
   right: 55px;
@@ -1478,6 +1432,9 @@ a:focus {
   opacity: 0;
   border-radius: 50px;
 }
+.backtop:hover{
+background: #e12454;
+}
 
 .backtop i {
   color: #fff;
@@ -1485,6 +1442,7 @@ a:focus {
 }
 
 .reveal {
+  animation:
   transition: all .3s;
   cursor: pointer;
   opacity: 1;

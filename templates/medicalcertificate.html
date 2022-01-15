@@ -3,44 +3,75 @@
 {% block title %}PHIẾU KHÁM{% endblock %}
 
 {% block content %}
-<div class="col-lg-12 col-md-12 ">
-				<div class="appoinment-wrap mt-5 mt-lg-0">
-					<h2 class="mb-2 title-color">LẬP PHIẾU KHÁM</h2>
-                    <form id="#" class="appoinment-form" method="post" action="#">
-                        <div class="form-group">
-                            <input name="name" id="name" class="form-control" placeholder="Họ Tên">
-                        </div>
-                        <div class="form-group">
-                            <input type="date" id="date" class="form-control">
-                        </div>
-                        <div class="form-group">
-                            <input name="tt" id="TT" class="form-control" placeholder="Triệu chứng">
-                        </div>
-                        <div class="form-group">
-                            <input name="dd" id="DD" class="form-control" placeholder="Dự Đoán Bệnh">
-                        </div>
-                        <div class="form-group">
-                            <select class="form-control" id="PK">
-                                <option>Chọn Phiếu Khám</option>
-                                { for  s in...}
-                                <option>Phiếu Khám 1</option>
-                                <option>Phiếu Khám 2</option>
-                                <option>Phiếu Khám 3</option>
-                                {endfor}
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <input name="name" id="priceK" class="form-control" placeholder="Tiền khám">
-                        </div>
-                        <div class="form-group">
-                            <input name="name" id="priceT" class="form-control" placeholder="Tiền thuốc">
-                        </div>
-                        <div class="form-group">
-                            <input type="number" name="price" id="price" class="form-control" placeholder="Số tiền thanh toán">
-                        </div>
 
-                    <a class="btn btn-main btn-round-full" href="#">THANH TOÁN<i class="icofont-simple-right ml-2  "></i></a>
-                </form>
+<div class="col-lg-10 col-md-12 container">
+    <div class="appoinment-wrap mt-5 mt-lg-0">
+        <form class="appoinment-form">
+            <h2 class="mb-2 title-color">LẬP PHIẾU KHÁM</h2><br>
+            <div class="row" >
+                <div class="form-group col-md-10">
+                    <div class="form-group">
+                        <select class="form-control" id="pt" name="patient_id" required>
+                            {%for s in p%}
+                            <option value="{{s.id}}">{{s.id}}</option>
+                            {%endfor%}
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group col-md-2">
+                    <button type="submit" class="btn btn-main-2 btn-round-full btn-icon">Tìm Bệnh Nhân</button>
+                </div>
             </div>
-			</div>
+        </form>
+        <form class="appoinment-form" method="post" action="#">
+            <div class="form-group">
+                <h6>Mã bệnh nhân</h6>
+                <input name="p_id"  class="form-control" value="{{patient.id}}" placeholder="{{patient.id}}" readonly>
+            </div>
+            <div class="form-group">
+                <h6>Tên bệnh nhân</h6>
+                <input name="name"  class="form-control" placeholder="{{patient.name}}" readonly>
+            </div>
+            <div class="form-group">
+                <h6>Triệu chứng</h6>
+                {% if symptom %}
+                <input  class="form-control" placeholder="{{symptom}}" required >
+                {% else %}
+                <input name="symptom" class="form-control" placeholder="Thêm triệu chứng" required>
+                {% endif %}
+            </div>
+            <div class="form-group">
+                <h6>Dự đoán bệnh</h6>
+                {% if guess %}
+                <input class="form-control" placeholder="{{guess}}" required >
+                {% else %}
+                <input name="guess"  class="form-control" placeholder="Thêm dự Đoán Bệnh" required>
+                {% endif %}
+            </div>
+            <button type="submit" class="btn btn-main-2 btn-round-full btn-icon" > Lưu</button>
+        </form>
+    </div>
+    <form class="appoinment-form" method="post">
+        <h4 class="mb-2 title-color">THÊM THUỐC VÀO PHIẾU KHÁM</h4><br>
+        <div class="row">
+            <div class="form-group col-md-2">
+                <select class="form-control" id="mc" name="medicine_id">
+                    <option>Loại Thuốc</option>
+                    {%for s in m%}
+                    <option value = {{s.id}}>{{s.name}}</option>
+                    {%endfor%}
+                </select>
+            </div>
+            <div class="form-group col-md-0">
+            </div>
+            <div class="form-group col-md-3">
+                <input name="quantily" id="priceK" class="form-control" placeholder="Số lượng" required>
+            </div>
+            <div class="form-group col-md-7">
+                <input name="user_manual" id="priceT" class="form-control" placeholder="Cách dùng" required>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-main-2 btn-round-full btn-icon" >Thêm Thuốc</button>
+    </form><br>
+</div>
 {% endblock %}

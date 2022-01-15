@@ -1,14 +1,13 @@
 from PhongKhamTu import db
 from sqlalchemy import Column, Integer, String, Float, Enum, DateTime, Boolean, ForeignKey
 from sqlalchemy.orm import relationship
-from datetime import datetime
+from datetime import date
 from flask_login import UserMixin
 from enum import Enum as UserEnum
 
 
 class BaseModel(db.Model):
     __abstract__ = True
-
     id = Column(Integer, primary_key=True, autoincrement=True)
 
 
@@ -20,17 +19,18 @@ class UserRole(UserEnum):
 
 
 class User(BaseModel, UserMixin):
-    __tablename__ = 'user'
     name = Column(String(50), nullable=False)
-    yearofbirth = Column(DateTime)
-    address = Column(String(100))
-    phone = Column(Integer)
+    yearofbirth = Column(Integer, nullable=False)
     username = Column(String(50), nullable=False, unique=True)
     password = Column(String(50), nullable=False)
     avatar = Column(String(200))
     email = Column(String(50))
-    joined_date = Column(DateTime, default=datetime.now())
+    active = Column(Boolean, default=True)
+    joined_date = Column(DateTime, default= date.today())
     user_role = Column(Enum(UserRole), default=UserRole.PATIENT)
+    MEL = relationship('MedicalExaminationList', backref='user', lazy = True)
+    bill = relationship('Bill', backref ='user', lazy = True)
+    mdcal = relationship('MedicalCertificate', backref = 'user', lazy = True)
     def __str__(self):
         return self.name
 
@@ -39,9 +39,13 @@ class PATIENT(BaseModel):
     __tablename__ = 'patient'
     name = Column(String(50), nullable=False)
     yearofbirth = Column(Integer, nullable=False)
+    phone = Column(String(10))
+    gioitinh = Column(String(10), nullable=False)
     address = Column(String(100))
+    citizen_identification = Column(String(13), nullable=False)
     patientMEP = relationship('MedicalExaminationPatient', backref='patient', lazy=True)
     patientMC = relationship('MedicalCertificate', backref='patient', lazy=True)
+    patientMR = relationship('MedicalRegister', backref='patient', lazy=True)
     def __str__(self):
         return self.name
 
@@ -76,12 +80,12 @@ class Medicine(BaseModel):
     def __str__(self):
         return self.name
 
-# Phieu Kham
+    # Phieu Kham
 class MedicalCertificate(BaseModel):
     __tablename__ = 'medicalcertificate'
-    doctor_id = Column(Integer)
+    doctor_id = Column(Integer, ForeignKey(User.id), nullable=False)
     patient_id = Column(Integer, ForeignKey(PATIENT.id), nullable=False)
-    healthcheck_date = Column(DateTime, default=datetime.today())
+    healthcheck_date = Column(DateTime, default=date.today())
     symptom = Column(String(100))
     guess = Column(String(100))
     details = relationship('MedicalCertificateDetail', backref='medicalcertificate', lazy=True)
@@ -93,31 +97,31 @@ class MedicalCertificateDetail(db.Model):
     __tablename__ = 'medicalcertìicatedetail'
     medicine_id = Column(Integer, ForeignKey(Medicine.id), nullable=False, primary_key=True)
     mc_id = Column(Integer, ForeignKey(MedicalCertificate.id), nullable=False, primary_key=True)
-    quantily = Column(Float, default=0)
+    quantily = Column(Float, default=1)
+    user_manual = Column(String(500), nullable=False)
 
 # HoaDon
 class Bill(BaseModel):
     __tablename__ = 'bill'
     mc_id = Column(Integer, ForeignKey(MedicalCertificate.id), nullable=False)
-    nurse_id = Column(Integer)
+    nurse_id = Column(Integer, ForeignKey(User.id), nullable= False)
     healthCheck_price = Column(Float, nullable= False)
+    drug_money = Column(Float,default=0, nullable= False)
 
 
 # DanhSachKhamBenh
 class MedicalExaminationList(BaseModel):
     __tablename__ = 'medicalexaminationlist'
-    nurse_id = Column(Integer, nullable=False)
-    mc_date = Column(DateTime, default=datetime.today())
+    nurse_id = Column(Integer,ForeignKey(User.id), nullable=False)
+    mc_date = Column(DateTime, default=date.today(), nullable=False)
     em = relationship('MedicalExaminationPatient', backref='medicalexaminationlist', lazy=True)
 
 
 # Dang Ky Kham Benh
 class MedicalRegister(BaseModel):
     __tablename__ = 'medicalregister'
-    name = Column(String(50), nullable=False)
-    yearofbirth = Column(Integer, nullable=False)
-    address = Column(String(100))
-    register_date = Column(DateTime, default=datetime.now(), nullable=False)
+    patient_id = Column(Integer, ForeignKey(PATIENT.id), nullable=False)
+    register_date = Column(DateTime, nullable=False)
 
 # Benh Nhan Kham Benh
 class MedicalExaminationPatient(db.Model):
@@ -127,23 +131,4 @@ class MedicalExaminationPatient(db.Model):
 
 
 if __name__ == '__main__':
-    db.create_all()
-
-    # a = [
-    #         {
-    #             "name": "Nguyễn Văn Trường",
-    #             "yearofbirth": "2000-01-05 05:20:00",
-    #             "address": "TP Ho Chi Minh",
-    #             "phone": 666888,
-    #             "username": "admin",
-    #             "password":"0CC175B9C0F1B6A831C399E269772661",
-    #             "user_role": "ADMIN"
-    #
-    #         }]
-    # for u in a:
-    #     Us = User(name=u["name"], yearofbirth=u["yearofbirth"], address=u["address"], username=u['username'], password=u['password'], user_role=u['user_role'])
-    #     db.session.add(Us)
-    #
-    #     db.session.commit()
-
-# username: admin password: a
+     db.create_all()

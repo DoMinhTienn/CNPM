@@ -58,9 +58,9 @@ class UnitView(AuthenticatedModelView):
     can_export = True
     column_labels = {'name': 'Đơn Vị', 'id': 'Mã Đơn Vị'}
 
-class MesicalRView(AuthenticatedModelView):
-    column_labels = {'id': 'STT', 'name': 'Tên', 'yearofbirth': 'Năm Sinh', 'address': 'Địa chỉ', 'register_date': 'Ngày Đăng Ký'}
-    column_searchable_list = ["name", 'register_date']
+class MedicalRView(AuthenticatedModelView):
+    column_labels = {'id': 'STT', 'patient_id': 'Mã Bệnh Nhân', 'register_date': 'Ngày Đăng Ký'}
+    column_searchable_list = ["patient_id", 'register_date']
     column_display_pk = True
     can_view_details = True
     can_export = True
@@ -91,7 +91,17 @@ class MedicalExaminationListView(AuthenticatedModelView):
 class StatsView(BaseView):
     @expose('/')
     def index(self):
-        return self.render('admin/stats.html', stats=utils.drugfrequency_stats())
+        year= request.args.get('year', datetime.now().year)
+        mc = utils.read_Medicalcertificate()
+        tienkham = utils.get_tienkham()
+        pk_id = request.args.get('pk')
+        pk = utils.get_mc_by_id(pk_id=pk_id)
+        tienthuoc = utils.tienthuoc(pk_id=pk_id)
+        sum = 0
+        for t in tienthuoc:
+            sum = sum + t[0] * t[1]
+        return self.render('admin/stats.html', month_stats=utils.drugfrequency_stats_month(year=year),\
+                           stats=utils.drugfrequency_stats())
 
     def is_accessible(self):
         return current_user.is_authenticated and current_user.user_role == UserRole.ADMIN
@@ -134,7 +144,7 @@ admin.add_view(PATIENTView(PATIENT, db.session, name='Bệnh Nhân'))
 admin.add_view(MedicalCertificateDetailView(MedicalCertificateDetail, db.session, name='Thêm Thuốc Vào Phiếu khám'))
 admin.add_view(UnitView(Unit, db.session, name='Đơn Vị'))
 admin.add_view(UserView(User, db.session, name='User'))
-admin.add_view(MesicalRView(MedicalRegister, db.session, name='Danh Sách Đăng Ký Khám'))
+admin.add_view(MedicalRView(MedicalRegister, db.session, name='Danh Sách Đăng Ký Khám'))
 admin.add_view(MedicalExaminationPatientView(MedicalExaminationPatient, db.session, name ='Bệnh Nhân Khám Bệnh'))
 admin.add_view(MedicalExaminationListView(MedicalExaminationList, db.session, name='Danh Sách Khám Bệnh'))
 admin.add_view(StatsView(name='Thống Kê'))

@@ -3,6 +3,8 @@
 {% block title %}Trang Chủ{% endblock %}
 
 {% block content %}
+
+
 <section class="banner">
 	<div class="container">
 		<div class="row">
@@ -12,7 +14,7 @@
 					<span class="text-uppercase text-sm letter-spacing ">DH19IT03</span>
 					<h1 class="mb-3 mt-3">Phòng Khám Tư</h1>
 					<div class="btn-container ">
-						<a href="{{ url_for('medical_register') }}" target="_blank" class="btn btn-main-2 btn-icon btn-round-full">Đặt Lịch Khám <i class="icofont-simple-right ml-2  "></i></a>
+						<a href="{{ url_for('service') }}" target="_blank" class="btn btn-main-2 btn-icon btn-round-full">Dịch Vụ <i class="icofont-simple-right ml-2  "></i></a>
 					</div>
 				</div>
 			</div>
@@ -64,7 +66,7 @@
 		<div class="row align-items-center">
 			<div class="col-lg-6 col-sm-12">
 				<div class="about-img mt-4 mt-lg-0">
-					<img width="100%" src="static/images/about/11.jpg" alt="aa" class="img-fluid">
+					<img width="100%" src="static/images/11.jpg" alt="aa" class="img-fluid">
 				</div>
 			</div>
 			<div class="col-lg-6">
@@ -72,50 +74,12 @@
 					<h2 class="title-color">Dịch vụ <br> chuyên nghiệp</h2>
 					<p class="mt-4 mb-5">Chúng tôi cung cấp các dịch vụ y tế tốt nhất với phương châm “tất cả vì bệnh nhân”.Đội ngũ bác sĩ của Phòng khám luôn nỗ lực với tinh thần trách nhiệm cao nhất để mang lại cho bệnh nhân dịch vụ khám chữa bệnh chất lượng cao với chi phí hợp lý.</p>
 
-					<a href="#" class="btn btn-main-2 btn-round-full btn-icon">Dịch vụ<i class="icofont-simple-right ml-3"></i></a>
+					<a href="{{ url_for('service') }}" class="btn btn-main-2 btn-round-full btn-icon">Dịch vụ<i class="icofont-simple-right ml-3"></i></a>
 				</div>
 			</div>
 		</div>
 	</div>
 </section>
-<section class="section register">
-	<div class="container">
-		<div class="row align-items-center">
-			<div class="col-lg-12 col-md-12 ">
-				<div class="appoinment-wrap mt-5 mt-lg-0">
-					<h2 class="mb-2 title-color">Đặt Lịch Khám</h2>
-					<p class="mb-4">Vui lòng điền đầy đủ thông tin để đăng ký khám bệnh</p>
-					<form id="#" class="appoinment-form" method="post" action="#">
-						<div>
-							<div class="form-group">
-                                <input name="name" id="name" type="text" class="form-control" placeholder="Họ tên">
-                            </div>
-                        </div>
-						<div>
-							<div class="form-group">
-                                <input name="birth" id="birth" type="text" class="form-control" placeholder="Năm sinh">
-                            </div>
-                        </div>
-                         <div>
-                            <div class="form-group">
-                                <input name="phone" id="phone" type="text" class="form-control" placeholder="Số điện thoại">
-                            </div>
-                        </div>
-
-                        <div>
-                            <div class="form-group">
-                                <input name="address" id="address" type="text" class="form-control" placeholder="Địa chỉ">
-                            </div>
-                        </div>
-						<div class="form-group">
-								<input name="registerdate" id="registerdate" type="date" class="form-control">
-						</div>
-						<a class="btn btn-main btn-round-full" href="{{ url_for('medical_register') }}" >Đăng Ký <i class="icofont-simple-right ml-2  "></i></a>
-                </form>
-            </div>
-			</div>
-		</div>
-	</div>
-</section>
+<h1>a</h1>
 
 {% endblock %}

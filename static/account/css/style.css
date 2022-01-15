@@ -132,6 +132,10 @@ sub {
 sup {
   top: -.5em; }
 
+#navbar{
+    display: none;
+}
+
 a {
   color: #007bff;
   text-decoration: none;
@@ -148,6 +152,9 @@ a:not([href]):not([tabindex]) {
     text-decoration: none; }
   a:not([href]):not([tabindex]):focus {
     outline: 0; }
+.navbarmain{
+    display:none;
+}
 
 pre,
 code,
