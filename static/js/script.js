@@ -35,6 +35,15 @@ function save(){
         }).catch(err =>  console.error(err))
     }
 }
+function cancel(){
+    if (confirm('Bạn chắc chắn hủy?') == true) {
+        fetch('/api/cancel', {
+            method: 'post'
+        }).then(res => res.json()).then(data => {
+            location.reload()
+        }).catch(err =>  console.error(err))
+    }
+}
 
 function deleteNote(pId) {
     if (confirm('Ban chac chan xoa benh nhan!!!') == true) {

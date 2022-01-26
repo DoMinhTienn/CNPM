@@ -1,0 +1,47 @@
+{% extends 'admin/base.html' %}
+
+{% block body %}
+<h1 class="text-info text-center">Danh sách bệnh nhân</h1>
+<br>
+<div>
+    <div class="row">
+        <div class="col-md-8 col-xs-12">
+            <table class="table" border="1" width="100%">
+                <tr>
+                    <th>Mã bệnh nhân</th>
+                    <th>Tên bệnh nhân </th>
+                    <th>Ngày sinh</th>
+                    <th>Số lần khám</th>
+                </tr>
+                {% for p in patient %}
+                <tr>
+                    <td>{{ p[0] }}</td>
+                    <td>{{ p[1] }}</td>
+                    <td>{{ p[2] }}</td>
+                    <td>{{ p[3] }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+
+        <div class="col-md-4 col-xs-12">
+            <form>
+                <div class="form-group text-danger">
+                    Tìm theo tên
+                    <input type="text" class="form-control" name="kwname" placeholder="Nhập tên bệnh nhân..." />
+                </div>
+                <div class="form-group text-danger">
+                    Tìm theo năm sinh
+                    <input type="number" class="form-control" name="kwy" placeholder="Nhập năm sinh...." />
+                </div>
+                <div class="form-group text-danger">
+                    Tìm theo số lần khám
+                    <input type="number" class="form-control" name="kwslk" placeholder="Nhập số lần khám...." />
+                </div>
+                <input type="submit" value="Tìm kiếm" class="btn btn-success" />
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

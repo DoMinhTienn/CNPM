@@ -1,0 +1,57 @@
+{% extends 'admin/base.html' %}
+
+{% block body %}
+<h1 class="text-info text-center">Phiếu khám</h1>
+<div class="container">
+    <form >
+        <div class="form-group">
+            <p class="text-danger">Chọn Phiếu Khám</p>
+            <select class="form-control" id="PK" name="pk">
+                <option>Chọn Phiếu Khám</option>
+                {% for s in mc %}
+                <option>{{s.id}}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <input type="submit" value="Xuất" class="btn btn-success" />
+    </form>
+    <br>
+    {% if pk_id %}
+    <table class="table" border="1" style="margin-bottom: 0;">
+        <tr><th colspan="2" style="text-align: center;">Phiếu khám bệnh</th></tr>
+        <tr>
+            <td>
+                Họ và tên: {{mcd[0].name}}
+            </td>
+            <td>
+                Ngày khám: {{mcd[0].healthcheck_date.strftime('%d-%m-%Y')}}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Triệu chứng: {{mcd[0].symptom}}
+            </td>
+            <td>
+                Dự đoán bệnh: {{mcd[0].guess}}
+            </td>
+        </tr>
+    </table>
+    <table class="table" border="1">
+        <tr>
+            <th>Thuốc</th>
+            <th>Đơn vị</th>
+            <th>Số lượng</th>
+            <th>Cách dùng</th>
+        </tr>
+        {% for m in mdc_list %}
+        <tr>
+            <td>{{m[0]}}</td>
+            <td>{{m[3]}}</td>
+            <td>{{m[1]}}</td>
+            <td>{{m[2]}}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% endif %}
+</div>
+{% endblock %}

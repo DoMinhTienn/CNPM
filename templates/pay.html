@@ -22,30 +22,32 @@
                         </div>
                         <a href="#priceK"><button class="btn btn-danger" type="submit">xuất</button></a>
                     </form>
-                    <br><br>
                     {% if pk_id %}
                     <form id="#" class="appoinment-form" method="post" action="#">
-                        <h6>Tên bệnh nhân</h6>
-                        <div class="form-group">
-                            <input name="name" id="name" class="form-control" placeholder="{{pk[0].name}}" value="{{pk[0].name}}" readonly>
-                        </div>
-                        <h6>Ngày khám</h6>
-                        <div class="form-group">
-                            <input name="name" id="h_date" class="form-control" placeholder="{{pk[0].healthcheck_date}}" value="{{pk[0].healthcheck_date.strftime('%d-%m-%Y')}}" readonly>
-                        </div>
-                        <h6>Tiền khám</h6>
-                        <div class="form-group">
-                            <input name="priceK" id="priceK" class="form-control" value="{{tienkham.value}}" readonly>
-                        </div>
-                        <h6>Tiền thuốc</h6>
-                        <div class="form-group">
-                            <input name="priceT" id="priceT" class="form-control" placeholder="{{ '{:,.1f}'.format(sum)}}" value="{{ '{:,.1f}'.format(sum)}}" readonly>
-                        </div>
-                        <h6>Tổng tiền</h6>
-                        <div class="form-group">
-                            <input type="number" name="price" id="price" class="form-control" placeholder="{{ tienkham.value + sum}}" value="{{ tienkham.value + sum}}" readonly>
-                        </div>
-                        <button class="btn btn-danger" type="submit" >Lưu</button>
+                        <table class="table" border="1">
+                            <tr><th colspan="2" style="text-align: center;">HÓA ĐƠN THANH TOÁN</th></tr>
+                            <tr>
+                                <td>
+                                    Họ và tên: {{pk[0].name}}
+                                </td>
+                                <td>
+                                    Ngày khám: {{pk[0].healthcheck_date.strftime('%d-%m-%Y')}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Tiền khám: {{ '{:,.1f}'.format(tienkham.value)}}
+                                </td>
+                                <td>
+                                    Tiền thuốc: {{'{:,.1f}'.format(sum)}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" > Tổng tiền: {{tienkham.value + sum}}</td>
+                            </tr>
+                        </table>
+
+                        <button class="btn btn-danger" type="submit" >Thanh toán</button>
                     </form>
                     {% endif %}
                 </div>

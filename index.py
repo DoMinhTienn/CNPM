@@ -4,15 +4,18 @@ import cloudinary.uploader
 from PhongKhamTu.admin import *
 from flask_login import login_user, logout_user, login_required, current_user
 from PhongKhamTu.models import UserRole
+import cloudinary
 
+cloudinary.config(
+  cloud_name="minhtienneee",
+  api_key="889638557239723",
+  api_secret="pLsXMGb9mVQTAsGWHqh2P0KRo9M"
+)
 
 @app.route("/")
 def home():
     return render_template('index.html')
 
-@app.route("/confirm")
-def confirm():
-    return render_template('confirm.html')
 
 @app.route("/service")
 def service():
@@ -46,6 +49,7 @@ def medicalcertificate():
     p = utils.read_patient();
     m = utils.read_medicine();
 
+
     patient_id = request.args.get('patient_id')
     patient = utils.get_patient_by_id(patient_id= patient_id)
     symptom = None
@@ -61,10 +65,11 @@ def medicalcertificate():
         quantity = request.form.get('quantily')
         user_manual = request.form.get('user_manual')
         medical = int(utils.get_mc_by_doctorid_last(current_user.id))
+
         if quantity and user_manual:
             utils.add_medicine(medicine_id=medicien_id,mc_id = medical, quantily=quantity, user_manual=user_manual)
-    return render_template('medicalcertificate.html', p = p, m = m, patient = patient, symptom = symptom, guess = guess, mdcal = mdcal, mc_id= medical)
-
+    mc_list = utils.get_medicine_by_mc_id(mc_id=medical)
+    return render_template('medicalcertificate.html', p = p, m = m, patient = patient, symptom = symptom, guess = guess, mdcal = mdcal, mc_id= medical, mc_list=mc_list)
 
 @app.route('/medical-register', methods=['get', 'post'])
 def medical_register():
@@ -78,7 +83,7 @@ def medical_register():
             gt = request.form.get('gt')
             c_id = request.form.get('c_id')
             registerdate = request.form.get('registerdate')
-            count = utils.count_patient_in_day(registerdate=registerdate)
+            count = utils.count_patient_in_day(registerdate =registerdate)
             if(count) < 30:
                 if len(phone)!=10:
                     err_msg = "Số điện thoại không đúng"
@@ -230,6 +235,14 @@ def delete_note(p_id):
         'code': 404,
         'err_msg': err_msg
     })
+
+@app.route('/api/cancel', methods=['post'])
+def cancel():
+    try:
+        del session['note']
+    except:
+        return jsonify({'code': 400})
+    return jsonify({'code': 200})
 
 if __name__ == "__main__":
 

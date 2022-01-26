@@ -30,7 +30,7 @@
 			<ul class="navbar-nav ml-auto">
 			  <li class="nav-item active"><a class="nav-link" href="/">Trang Chủ</a></li>
 			  <li class="nav-item"><a class="nav-link" href="{{ url_for('service') }}">Dịch Vụ</a></li>
-			  <li class="nav-item active"><a class="nav-link" href="{{ url_for('medical_register') }}">Đăng kí khám bệnh</a></li>
+			  <li class="nav-item active"><a class="nav-link" href="{{ url_for('medical_register') }}">Đăng ký khám bệnh</a></li>
 				{% if current_user.is_authenticated %}
 					{% if current_user.user_role.value != 1%}
 						<li class="nav-item dropdown">

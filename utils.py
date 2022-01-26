@@ -1,9 +1,11 @@
 import os
+from PhongKhamTu import app, db
 from PhongKhamTu.models import *
 from flask_login import current_user
 from sqlalchemy import func
 from sqlalchemy.sql import extract
 import hashlib
+
 
 def get_user_by_id(user_id):
     return User.query.get(user_id)
@@ -36,25 +38,6 @@ def drugfrequency_stats(kwtt=None, kwdv=None, kwsld=None):
     if kwsld:
         p = p.filter(func.count(MedicalCertificateDetail.medicine_id).__eq__(kwsld))
 
-    return p.all()
-
-def drugfrequency_stats_month(year, kwtt=None, kwdv=None, kwsld=None):
-    p = db.session.query(Medicine.name, Unit.name, func.sum(MedicalCertificateDetail.quantily),
-                         func.count(MedicalCertificateDetail.medicine_id), extract('month', MedicalCertificate.healthcheck_date)) \
-        .join(Unit) \
-        .join(MedicalCertificateDetail, MedicalCertificateDetail.medicine_id.__eq__(Medicine.id), isouter=True) \
-        .join(MedicalCertificate, MedicalCertificate.id.__eq__(MedicalCertificateDetail.mc_id)) \
-        .filter(extract('year',MedicalCertificate.healthcheck_date) == year)\
-        .group_by(Medicine.id, Medicine.name) \
-        .group_by(extract('month', MedicalCertificate.healthcheck_date)) \
-        .order_by(extract('month', MedicalCertificate.healthcheck_date))
-
-    if kwtt:
-        p = p.filter(Medicine.name.contains((kwtt)))
-    if kwdv:
-        p = p.filter(Unit.name.contains(kwdv))
-    if kwsld:
-        p = p.filter(func.count(MedicalCertificateDetail.medicine_id).__eq__(kwsld))
     return p.all()
 
 def mclist_view(kwds = None, kwyt = None,kwbn =None, from_date = None, to_date = None):
@@ -91,7 +74,23 @@ def patient_view(kwname =None, kwy = None, kwslk = None):
         pass
     return p.all()
 
+def read_mclist(kwyt = None, date = None):
+    mc_list =  MedicalExaminationList.query
 
+    if kwyt:
+        mc_list = mc_list.filter(MedicalExaminationList.nurse_id.__eq__(kwyt))
+    if date:
+        mc_list = mc_list.filter(MedicalExaminationList.mc_date == date)
+    return mc_list
+def get_mc_by_day(mcdate = None):
+    p = db.session.query(MedicalExaminationList.mc_date,MedicalExaminationPatient.patient_id, PATIENT.name, PATIENT.gioitinh, PATIENT.yearofbirth, PATIENT.address).\
+        join(MedicalExaminationPatient, MedicalExaminationPatient.mc_id.__eq__(MedicalExaminationList.id), isouter = True).\
+        join(PATIENT, PATIENT.id.__eq__(MedicalExaminationPatient.patient_id), isouter = True).\
+        group_by(MedicalExaminationList.mc_date,MedicalExaminationPatient.patient_id, PATIENT.name, PATIENT.gioitinh, PATIENT.yearofbirth, PATIENT.address)
+
+    if mcdate:
+        p = p.filter(MedicalExaminationList.mc_date == mcdate)
+    return p.all()
 def count_patient_in_day(registerdate):
     return MedicalRegister.query.filter(MedicalRegister.register_date == registerdate).count()
 
@@ -101,7 +100,7 @@ def add_register(name, birth, address, c_id, phone, gt):
                 , address = address,
                 citizen_identification = c_id,
                 gioitinh = gt,
-                phone = phone,)
+                phone = phone)
     db.session.add(p)
     db.session.commit()
 
@@ -109,8 +108,7 @@ def add_user(name, username, password,birth, **kwargs):
     password = str(hashlib.md5(password.strip().encode('utf-8')).hexdigest())
     user = User(name = name,username=username,password=password,
                 yearofbirth = birth,
-                email = kwargs.get('email'),
-                avatar = kwargs.get('avatar'))
+                email = kwargs.get('email'),avatar = kwargs.get('avatar'))
 
     db.session.add(user)
     db.session.commit()
@@ -154,9 +152,9 @@ def read_Medicalcertificate():
     return MedicalCertificate.query.all()
 
 def get_mc_by_id(pk_id):
-    p = db.session.query(MedicalCertificate.healthcheck_date, PATIENT.name).\
+    p = db.session.query(MedicalCertificate.healthcheck_date, PATIENT.name, MedicalCertificate.symptom, MedicalCertificate.guess).\
         join(PATIENT, PATIENT.id.__eq__(MedicalCertificate.patient_id),  isouter = True).\
-        group_by(MedicalCertificate.healthcheck_date, PATIENT.name)
+        group_by(MedicalCertificate.healthcheck_date, PATIENT.name, MedicalCertificate.symptom, MedicalCertificate.guess)
     if(pk_id):
         p = p.filter(MedicalCertificate.id.__eq__(pk_id))
     return p.all()
@@ -170,47 +168,6 @@ def tienthuoc(pk_id = None):
     if pk_id:
         p = p.filter(MedicalCertificateDetail.mc_id.__eq__(pk_id))
     return p.all()
-
-# def total_money(pk_id):
-#     tt = tienthuoc(pk_id)
-#     total = 0;
-#     for t in tt:
-#         total += t[0] * t[1]
-#     tk = get_tienkham()
-#     return total + tk.value;
-#
-# def get_phieukham_id():
-#     return db.session.query(MedicalCertificate.id).all()
-#
-# def tongdoanhthu(Date = None):
-#     dt = 0
-#     id = get_phieukham_id()
-#     for i in id:
-#         dt += total_money(i[0])
-#     return dt
-#
-# def doanhthu_day(Day):
-#     p = db.session.query(MedicalCertificate.healthcheck_date, tongdoanhthu(MedicalCertificate.healthcheck_date))
-#     if Day:
-#         p = p.filter(MedicalCertificate.healthcheck_date.__eq__(Day))
-#
-#     return p.all();
-#
-# def day():
-#     return db.session.query(MedicalCertificate.healthcheck_date).all()
-# def thongke():
-#     p =db.session.query(MedicalCertificate.healthcheck_date, func.count(MedicalCertificate.id))\
-#     .group_by(MedicalCertificate.healthcheck_date)
-#     return p.all()
-#
-# def total_money_stats(pk_id):
-#     tt = db.session.query(Medicine.price, MedicalCertificateDetail.quantily, Regulation.value).\
-#         join(Medicine, Medicine.id.__eq__(MedicalCertificateDetail.medicine_id), isouter = True).\
-#         group_by(Medicine.price, MedicalCertificateDetail.quantily)
-#     if pk_id:
-#         tt = tt.filter(MedicalCertificateDetail.mc_id.__eq__(pk_id))
-#     return tt.all()
-
 def add_bill(mc_id = None, tk = None, tt = None):
     if mc_id:
       b = Bill(user = current_user ,mc_id = mc_id, healthCheck_price = tk, drug_money = tt)
@@ -245,3 +202,12 @@ def add_medicine(medicine_id, mc_id, quantily, user_manual):
 
         db.session.add(mdcine)
     db.session.commit()
+
+def get_medicine_by_mc_id(mc_id):
+    m = db.session.query(Medicine.name, MedicalCertificateDetail.quantily, MedicalCertificateDetail.user_manual, Unit.name).\
+        join(Medicine, Medicine.id .__eq__(MedicalCertificateDetail.medicine_id), isouter = True).\
+        join(Unit, Unit.id.__eq__(Medicine.unit_id), isouter = True).\
+        group_by(Medicine.name, MedicalCertificateDetail.quantily, MedicalCertificateDetail.user_manual, Unit.name)
+    if mc_id:
+        m = m.filter(MedicalCertificateDetail.mc_id.__eq__(mc_id))
+    return m.all()

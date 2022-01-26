@@ -73,5 +73,34 @@
         </div>
         <button type="submit" class="btn btn-main-2 btn-round-full btn-icon" >Thêm Thuốc</button>
     </form><br>
+     {%if mc_id%}
+        <div class="container col-md-12">
+          <h4 class="mb-2 title-color">DANH SÁCH THUỐC</h4><br>
+          <p>Phếu khám: {{mc_id}}</p>
+          <table class="table border border-secondary" >
+            <thead>
+              <tr>
+                <th>STT</th>
+                <th>Thuốc</th>
+                <th>Đơn vị</th>
+                <th>Số lượng</th>
+                <th>Cách dùng</th>
+              </tr>
+            </thead>
+            <tbody>
+            {% for m in mc_list %}
+            <tr>
+                <td>1</td>
+                <td>{{m[0]}}</td>
+                <td>{{m[3]}}</td>
+                <td>{{m[1]}}</td>
+                <td>{{m[2]}}</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+    </div>
+        <button type="submit" class="btn btn-main-2 btn-round-full btn-icon" ><a style="color: white" href="{{ url_for('medicalcertificate') }}">Hoàn thành</a></button><hr>
+    {%endif%}
 </div>
 {% endblock %}
